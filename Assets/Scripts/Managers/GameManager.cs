@@ -36,25 +36,23 @@ public class GameManager : MonoBehaviour
         }
     }
     
-   void Start()
+    void Start()
     {
-        
-        // Forzar estado inicial
+        // Forzar inicio limpio
         currentState = GameState.Gameplay;
         Time.timeScale = 1f;
         
         if (shopUI != null)
         {
             shopUI.SetActive(false);
-            Debug.Log("Tienda forzada a cerrar");
         }
         
-        Debug.Log("Juego iniciado correctamente");
+        Debug.Log("Juego iniciado. TimeScale: 1");
     }
     
     void Update()
     {
-        // Pausa con ESC (opcional)
+        // Pausa con ESC
         if (Input.GetKeyDown(KeyCode.Escape))
         {
             if (currentState == GameState.Gameplay)
@@ -72,17 +70,19 @@ public class GameManager : MonoBehaviour
     {
         currentState = newState;
         
-        // Congelar tiempo según el estado
-        if (newState == GameState.Shop || newState == GameState.Paused || newState == GameState.GameOver)
+        // --- CORRECCIÓN CRÍTICA ---
+        // SOLO pausar el tiempo real en PAUSA o GAME OVER.
+        // En la TIENDA dejamos el tiempo corriendo para que la UI responda bien.
+        if (newState == GameState.Paused || newState == GameState.GameOver)
         {
-            Time.timeScale = 0f; // Pausar el juego
+            Time.timeScale = 0f;
         }
         else
         {
-            Time.timeScale = 1f; // Reanudar el juego
+            Time.timeScale = 1f; // Gameplay y Shop corren a tiempo normal
         }
         
-        Debug.Log($"Estado del juego: {newState}");
+        Debug.Log($"Estado cambiado a: {newState} | TimeScale: {Time.timeScale}");
     }
     
     public void OnLevelComplete()
@@ -91,30 +91,25 @@ public class GameManager : MonoBehaviour
         
         if (currentLevel < totalLevels)
         {
-            // Abrir tienda
             OpenShop();
         }
         else
         {
-            // Última fase - Boss Final
-            Debug.Log("¡Preparándose para el Boss Final!");
-            currentLevel++;
-            // Aquí cargaríamos la escena del boss final
+            Debug.Log("¡BOSS FINAL!");
+            // Aquí iría tu lógica para cargar la escena del Boss o spawnearlo
+            currentLevel++; 
         }
     }
     
     public void OpenShop()
     {
-        SetState(GameState.Shop);
-        
-        // TEMPORAL: No pausar el juego
-        Time.timeScale = 0f; // ← Cambiar de 0 a 1 temporalmente
+        SetState(GameState.Shop); // Esto pondrá TimeScale a 1f
         
         if (shopUI != null)
         {
             shopUI.SetActive(true);
         }
-}
+    }
     
     public void CloseShop()
     {
@@ -125,10 +120,10 @@ public class GameManager : MonoBehaviour
         
         SetState(GameState.Gameplay);
         
-        // Avanzar al siguiente nivel
+        // Avanzar nivel
         currentLevel++;
         
-        // Reiniciar el WaveManager para el siguiente nivel
+        // Iniciar siguiente nivel en WaveManager
         if (waveManager != null)
         {
             waveManager.StartNextLevel(currentLevel);
@@ -138,20 +133,16 @@ public class GameManager : MonoBehaviour
     public void PauseGame()
     {
         SetState(GameState.Paused);
-        Debug.Log("Juego pausado");
     }
     
     public void ResumeGame()
     {
         SetState(GameState.Gameplay);
-        Debug.Log("Juego reanudado");
     }
     
     public void GameOver()
     {
         SetState(GameState.GameOver);
-        Debug.Log("GAME OVER");
-        // Aquí mostrarías la pantalla de Game Over
     }
     
     public int GetCurrentLevel() => currentLevel;

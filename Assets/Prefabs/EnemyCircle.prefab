@@ -14,6 +14,7 @@ GameObject:
   - component: {fileID: 7839307646899280981}
   - component: {fileID: 2996492737707379881}
   - component: {fileID: -3553740998832891778}
+  - component: {fileID: 2929834758196603624}
   m_Layer: 8
   m_Name: EnemyCircle
   m_TagString: Enemy
@@ -203,11 +204,29 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::EnemyCircleShooter
   enemyData: {fileID: 11400000, guid: 4ca6e08926f7d024cb4ae0fc6cf04fe0, type: 2}
-  bulletsPerShot: 64
+  bulletsPerShot: 16
   rotationOffset: 5
   leftX: -12.8
   rightX: 12.8
-  patrolSpeed: 10
+  patrolSpeedX: 2
+  topY: 7
+  bottomY: 6
+  patrolSpeedY: 1
+--- !u!114 &2929834758196603624
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1633647093165963086}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0f5422cdcf5114542bc83fc43712c28a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::EnemyHealthDisplay
+  healthText: {fileID: 0}
+  offset: {x: 0, y: 0.2, z: 0}
+  minecraftFont: {fileID: 11400000, guid: 9c407b30437c50647b2d9c3682169b55, type: 2}
 --- !u!1001 &3787896176051407756
 PrefabInstance:
   m_ObjectHideFlags: 0

@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: MBoss1
   m_EditorClassIdentifier: Assembly-CSharp::EnemyData
   enemyName: Mboss1
-  maxHealth: 100
+  maxHealth: 120
   moveSpeed: 2
   damageToPlayer: 2
   fireRate: 0.2

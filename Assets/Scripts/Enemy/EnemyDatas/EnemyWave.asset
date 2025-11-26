@@ -12,13 +12,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9b4f8fbb1fa3e704196a87e9992b40fa, type: 3}
   m_Name: EnemyWave
   m_EditorClassIdentifier: Assembly-CSharp::EnemyData
-  enemyName: 
-  maxHealth: 1
+  enemyName: EnemyWave
+  maxHealth: 25
   moveSpeed: 2
   damageToPlayer: 1
-  fireRate: 0.5
+  fireRate: 0.9
   bulletPrefab: {fileID: 2760153454558538754, guid: 907cdaf884415e940bbea1d94df7ce8a, type: 3}
-  minCredits: 0
+  minCredits: 1
   maxCredits: 2
   scoreValue: 10
   enemyColor: {r: 1, g: 0, b: 0, a: 1}

@@ -10,15 +10,15 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 9b4f8fbb1fa3e704196a87e9992b40fa, type: 3}
-  m_Name: EnemyCircle
+  m_Name: BossData
   m_EditorClassIdentifier: Assembly-CSharp::EnemyData
-  enemyName: EnemyCircle
-  maxHealth: 20
+  enemyName: Mboss1
+  maxHealth: 200
   moveSpeed: 2
-  damageToPlayer: 1
-  fireRate: 1.7
+  damageToPlayer: 2
+  fireRate: 0.2
   bulletPrefab: {fileID: 2760153454558538754, guid: 4b0f5a0360c5b324ca715a71dd4f4423, type: 3}
   minCredits: 1
-  maxCredits: 2
-  scoreValue: 0
+  maxCredits: 3
+  scoreValue: 10
   enemyColor: {r: 1, g: 0, b: 0, a: 1}

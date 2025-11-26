@@ -19,54 +19,51 @@ public class WaveManager : MonoBehaviour
     [SerializeField] private int currentWaveIndex = 0;
     [SerializeField] private int enemiesAlive = 0;
     
+    // Banderas de control
     private bool waveInProgress = false;
-    private bool levelInProgress = false;
+    private bool isSpawning = false; // ¡NUEVO! Evita que la oleada termine mientras aparecen enemigos
     private bool levelCompleted = false;
 
     void Start()
     {
+        // Asegurarse de empezar limpio
+        enemiesAlive = 0;
         StartLevel(0);
     }
     
     void Update()
     {
-        // Solo procesar si estamos en gameplay
-        if (GameManager.Instance != null && !GameManager.Instance.IsGameplayActive())
-        {
-            return;
-        }
+        if (GameManager.Instance != null && !GameManager.Instance.IsGameplayActive()) return;
         
-        // Si hay una oleada en progreso Y no hay enemigos vivos
-        if (waveInProgress && enemiesAlive <= 0)
+        // CONDICIÓN CORREGIDA:
+        // Solo completar si:
+        // 1. La oleada está activa
+        // 2. NO se están generando enemigos actualmente (!isSpawning)
+        // 3. No quedan enemigos vivos
+        if (waveInProgress && !isSpawning && enemiesAlive <= 0)
         {
-            Debug.Log($"✓ Oleada {currentWaveIndex + 1}/{levels[currentLevelIndex].waves.Count} completada!");
-            
-            waveInProgress = false; // Marcar oleada como completada
-            
-            // VERIFICAR ANTES DE INCREMENTAR
-            int nextWaveIndex = currentWaveIndex + 1;
-            int totalWaves = levels[currentLevelIndex].waves.Count;
-            
-            Debug.Log($"   Próxima oleada sería: {nextWaveIndex + 1}");
-            Debug.Log($"   Total de oleadas: {totalWaves}");
-            
-            // ¿Es esta la ÚLTIMA oleada?
-            if (nextWaveIndex >= totalWaves)
-            {
-                // SÍ - Esta era la última oleada
-                Debug.Log("→ ¡ERA LA ÚLTIMA OLEADA! Nivel completado.");
-                currentWaveIndex = nextWaveIndex; // Actualizar el índice
-                OnLevelComplete();
-            }
-            else
-            {
-                // NO - Aún hay más oleadas
-                currentWaveIndex = nextWaveIndex; // Actualizar el índice
-                int remainingWaves = totalWaves - nextWaveIndex;
-                Debug.Log($"→ Quedan {remainingWaves} oleadas más. Siguiente en 3s...");
-                
-                Invoke(nameof(StartNextWave), 3f);
-            }
+            CompleteWave();
+        }
+    }
+    
+    private void CompleteWave()
+    {
+        Debug.Log($"✓ Oleada {currentWaveIndex + 1} completada");
+        
+        waveInProgress = false;
+        
+        int nextWaveIndex = currentWaveIndex + 1;
+        int totalWaves = levels[currentLevelIndex].waves.Count;
+        
+        if (nextWaveIndex >= totalWaves)
+        {
+            OnLevelComplete();
+        }
+        else
+        {
+            currentWaveIndex = nextWaveIndex;
+            Debug.Log("Siguiente oleada en 3s...");
+            Invoke(nameof(StartNextWave), 3f);
         }
     }
         
@@ -74,40 +71,37 @@ public class WaveManager : MonoBehaviour
     {
         if (levelIndex >= levels.Count)
         {
+            Debug.LogError("Intentando cargar un nivel que no existe: " + levelIndex);
             return;
         }
         
         currentLevelIndex = levelIndex;
         currentWaveIndex = 0;
-        levelInProgress = true;
-        levelCompleted = false; // NUEVO: Resetear flag
+        levelCompleted = false;
         
+        Debug.Log($"=== INICIANDO NIVEL {levelIndex + 1} ===");
         StartNextWave();
     }
     
     public void StartNextLevel(int levelNumber)
     {
-        // levelNumber es 1-indexed (Nivel 1, 2, 3...)
-        // currentLevelIndex es 0-indexed (0, 1, 2...)
+        // levelNumber viene del GameManager (1, 2, 3...)
+        // Convertimos a índice (0, 1, 2...)
         StartLevel(levelNumber - 1);
     }
     
     private void StartNextWave()
     {
-        if (currentWaveIndex >= levels[currentLevelIndex].waves.Count)
-        {
-            return;
-        }
+        if (currentLevelIndex >= levels.Count || currentWaveIndex >= levels[currentLevelIndex].waves.Count) return;
         
         WaveData currentWave = levels[currentLevelIndex].waves[currentWaveIndex];
-        Debug.Log($"Iniciando oleada {currentWaveIndex + 1}: {currentWave.waveName}");
-        
         StartCoroutine(SpawnWave(currentWave));
     }
     
     private IEnumerator SpawnWave(WaveData wave)
     {
         waveInProgress = true;
+        isSpawning = true; // ¡IMPORTANTE! Bloqueamos la condición de victoria
         
         yield return new WaitForSeconds(wave.delayBeforeStart);
         
@@ -116,33 +110,23 @@ public class WaveManager : MonoBehaviour
             if (enemySpawn.enemyPrefab != null)
             {
                 Instantiate(enemySpawn.enemyPrefab, enemySpawn.spawnPosition, Quaternion.identity);
-                enemiesAlive++;
+                enemiesAlive++; // Incrementamos ANTES de esperar
             }
             
             yield return new WaitForSeconds(wave.spawnDelay);
         }
+        
+        isSpawning = false; // ¡Ahora sí! Si matas a todos, ganas
     }
     
     private void OnLevelComplete()
     {
-        // VERIFICACIÓN ADICIONAL: ¿Realmente completamos todas las oleadas?
-        if (currentWaveIndex < levels[currentLevelIndex].waves.Count)
-        {
-            return; // NO completar el nivel
-        }
+        if (levelCompleted) return;
         
-        // Prevenir llamadas múltiples
-        if (levelCompleted) 
-        {
-            return;
-        }
-        
+        Debug.Log("=== NIVEL COMPLETADO ===");
         levelCompleted = true;
-        levelInProgress = false;
+        waveInProgress = false;
         
-
-        
-        // Notificar al GameManager
         if (GameManager.Instance != null)
         {
             GameManager.Instance.OnLevelComplete();
@@ -152,9 +136,9 @@ public class WaveManager : MonoBehaviour
     public void OnEnemyKilled()
     {
         enemiesAlive--;
-        Debug.Log($"Enemigos restantes: {enemiesAlive}");
+        // Seguridad para que nunca sea negativo
+        if (enemiesAlive < 0) enemiesAlive = 0; 
     }
     
     public int GetCurrentWave() => currentWaveIndex + 1;
-    public int GetTotalWaves() => levels[currentLevelIndex].waves.Count;
 }

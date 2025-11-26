@@ -6,11 +6,19 @@ public class EnemyCircleShooter : EnemyController
     [SerializeField] private int bulletsPerShot = 8; // Balas por ráfaga
     [SerializeField] private float rotationOffset = 0f; // Para rotar el patrón cada disparo
     
-    [Header("Movimiento Patrulla")]
-    [SerializeField] private float leftX = -12.8f;
-    [SerializeField] private float rightX = 12.8f;
-    [SerializeField] private float patrolSpeed = 3f;
-    private int patrolDirection = 1; // 1 = hacia la derecha, -1 = hacia la izquierda
+    //Movimiento Patrulla horizontal
+    [Header("Movimiento Patrulla Horizontal")]
+    [SerializeField] private float leftX = -8f;
+    [SerializeField] private float rightX = 8f;
+    [SerializeField] private float patrolSpeedX = 3f;
+    private int patrolDirectionX = 1; // 1 = derecha, -1 = izquierda
+    
+    //Movimiento Patrulla Vertical
+    [Header("Movimiento Vertical")]
+    [SerializeField] private float topY = 4f;
+    [SerializeField] private float bottomY = 2f;
+    [SerializeField] private float patrolSpeedY = 2f;
+    private int patrolDirectionY = -1; // 1 = arriba, -1 = abajo
     
     protected override void Shoot()
     {
@@ -40,23 +48,38 @@ public class EnemyCircleShooter : EnemyController
         rotationOffset += 15f;
     }
 
-    // Usamos FixedUpdate para no ocultar el Update() del EnemyController
     void FixedUpdate()
     {
         Vector3 pos = transform.position;
 
-        pos.x += patrolDirection * patrolSpeed * Time.deltaTime;
+        // Movimiento horizontal
+        pos.x += patrolDirectionX * patrolSpeedX * Time.deltaTime;
 
-        // Cambiar dirección si alcanzamos los límites
+        // Cambiar dirección horizontal si alcanzamos los límites
         if (pos.x >= rightX)
         {
             pos.x = rightX;
-            patrolDirection = -1;
+            patrolDirectionX = -1;
         }
         else if (pos.x <= leftX)
         {
             pos.x = leftX;
-            patrolDirection = 1;
+            patrolDirectionX = 1;
+        }
+
+        // Movimiento vertical
+        pos.y += patrolDirectionY * patrolSpeedY * Time.deltaTime;
+
+        // Cambiar dirección vertical si alcanzamos los límites
+        if (pos.y >= topY)
+        {
+            pos.y = topY;
+            patrolDirectionY = -1; // Bajar
+        }
+        else if (pos.y <= bottomY)
+        {
+            pos.y = bottomY;
+            patrolDirectionY = 1; // Subir
         }
 
         transform.position = pos;

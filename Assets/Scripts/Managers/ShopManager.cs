@@ -7,408 +7,229 @@ public class ShopManager : MonoBehaviour
     [Header("Referencias UI")]
     [SerializeField] private GameObject shopPanel;
     [SerializeField] private TextMeshProUGUI creditsText;
-    [SerializeField] private TextMeshProUGUI shopTitleText; // NUEVO
+    [SerializeField] private TextMeshProUGUI shopTitleText;
     
-    [Header("Paneles de Tienda por Fase")]
-    [SerializeField] private GameObject phase1Panel; // Armas
-    [SerializeField] private GameObject phase2Panel; // Stats
-    [SerializeField] private GameObject phase3Panel; // Especiales
+    [Header("Paneles de Fase")]
+    [SerializeField] private GameObject phase1Panel;
+    [SerializeField] private GameObject phase2Panel;
+    [SerializeField] private GameObject phase3Panel;
     
-    [Header("Fase 1 - Botones de Armas")]
+    [Header("Fase 1 - Armas (Botones)")]
     [SerializeField] private Button btnZigzag;
     [SerializeField] private Button btnShotgun;
     [SerializeField] private Button btnRockets;
     
-    [Header("Fase 2 - Botones de Stats")]
+    [Header("Fase 2 - Stats (Botones)")]
     [SerializeField] private Button btnExtraHealth;
     [SerializeField] private Button btnMoreDamage;
     [SerializeField] private Button btnMoreSpeed;
     
-    [Header("Fase 3 - Botones Especiales")]
+    [Header("Fase 3 - Especiales (Botones)")]
     [SerializeField] private Button btnMassiveHealth;
     [SerializeField] private Button btnShield;
     
-    [Header("Botón Continuar")]
-    [SerializeField] private Button btnContinue;
+    [Header("Navegación")]
+    [SerializeField] private Button btnContinuePhase1; 
+    [SerializeField] private Button btnContinuePhase2; 
+    [SerializeField] private Button btnContinuePhase3; 
     
-    [Header("Costos Fase 1 - Armas")]
+    [Header("Costos Fase 1")]
     [SerializeField] private int zigzagCost = 15;
     [SerializeField] private int shotgunCost = 15;
     [SerializeField] private int rocketsCost = 18;
     
-    [Header("Costos Fase 2 - Stats")]
+    [Header("Costos Fase 2")]
     [SerializeField] private int extraHealthCost = 20;
     [SerializeField] private int moreDamageCost = 20;
     [SerializeField] private int moreSpeedCost = 20;
     
-    [Header("Costos Fase 3 - Especiales")]
+    [Header("Costos Fase 3")]
     [SerializeField] private int massiveHealthCost = 30;
     [SerializeField] private int shieldCost = 30;
     
     private int currentPhase = 1;
 
-
-    void Update()
-{
-    // Debug temporal - quitar después
-    if (Input.GetKeyDown(KeyCode.D))
-    {
-        
-        if (CurrencyManager.Instance != null)
-        {
-            Debug.Log($"Créditos actuales: {CurrencyManager.Instance.GetCurrentCredits()}");
-        }
-        
-        Debug.Log($"btnZigzag existe: {btnZigzag != null}");
-        if (btnZigzag != null)
-        {
-            Debug.Log($"btnZigzag interactable: {btnZigzag.interactable}");
-            Debug.Log($"btnZigzag tiene listeners: {btnZigzag.onClick.GetPersistentEventCount()}");
-        }
-    }
-}
-    
     void Start()
     {
-        Debug.Log("=== ShopManager Start ===");
+        // --- Listeners Fase 1 ---
+        if (btnZigzag != null) btnZigzag.onClick.AddListener(() => BuyUpgrade("Zigzag", zigzagCost));
+        if (btnShotgun != null) btnShotgun.onClick.AddListener(() => BuyUpgrade("Shotgun", shotgunCost));
+        if (btnRockets != null) btnRockets.onClick.AddListener(() => BuyUpgrade("Rockets", rocketsCost));
         
-        // FASE 1 - Armas
-        if (btnZigzag != null)
-        {
-            btnZigzag.onClick.AddListener(() => BuyUpgrade("Zigzag", zigzagCost, 1));
-            Debug.Log("Listener Zigzag añadido");
-        }
-        else Debug.LogError("btnZigzag es NULL!");
+        // --- Listeners Fase 2 ---
+        if (btnExtraHealth != null) btnExtraHealth.onClick.AddListener(() => BuyUpgrade("ExtraHealth", extraHealthCost));
+        if (btnMoreDamage != null) btnMoreDamage.onClick.AddListener(() => BuyUpgrade("MoreDamage", moreDamageCost));
+        if (btnMoreSpeed != null) btnMoreSpeed.onClick.AddListener(() => BuyUpgrade("MoreSpeed", moreSpeedCost));
         
-        if (btnShotgun != null)
-        {
-            btnShotgun.onClick.AddListener(() => BuyUpgrade("Shotgun", shotgunCost, 1));
-            Debug.Log("Listener Shotgun añadido");
-        }
-        else Debug.LogError("btnShotgun es NULL!");
+        // --- Listeners Fase 3 ---
+        if (btnMassiveHealth != null) btnMassiveHealth.onClick.AddListener(() => BuyUpgrade("MassiveHealth", massiveHealthCost));
+        if (btnShield != null) btnShield.onClick.AddListener(() => BuyUpgrade("Shield", shieldCost));
         
-        if (btnRockets != null)
-        {
-            btnRockets.onClick.AddListener(() => BuyUpgrade("Rockets", rocketsCost, 1));
-            Debug.Log("Listener Rockets añadido");
-        }
-        else Debug.LogError("btnRockets es NULL!");
-        
-        // FASE 2 - Stats
-        if (btnExtraHealth != null)
-            btnExtraHealth.onClick.AddListener(() => BuyUpgrade("ExtraHealth", extraHealthCost, 2));
-        
-        if (btnMoreDamage != null)
-            btnMoreDamage.onClick.AddListener(() => BuyUpgrade("MoreDamage", moreDamageCost, 2));
-        
-        if (btnMoreSpeed != null)
-            btnMoreSpeed.onClick.AddListener(() => BuyUpgrade("MoreSpeed", moreSpeedCost, 2));
-        
-        // FASE 3 - Especiales
-        if (btnMassiveHealth != null)
-            btnMassiveHealth.onClick.AddListener(() => BuyUpgrade("MassiveHealth", massiveHealthCost, 3));
-        
-        if (btnShield != null)
-            btnShield.onClick.AddListener(() => BuyUpgrade("Shield", shieldCost, 3));
-        
-        // Continuar
-        if (btnContinue != null)
-        {
-            btnContinue.onClick.AddListener(ContinueWithoutUpgrade);
-            Debug.Log("Listener Continuar añadido");
-        }
-        else Debug.LogError("btnContinue es NULL!");
+        // --- Listeners para TODOS los botones de continuar (por si no compras nada) ---
+        if (btnContinuePhase1 != null) btnContinuePhase1.onClick.AddListener(CloseShop);
+        if (btnContinuePhase2 != null) btnContinuePhase2.onClick.AddListener(CloseShop);
+        if (btnContinuePhase3 != null) btnContinuePhase3.onClick.AddListener(CloseShop);
     }
     
     void OnEnable()
     {
-        Debug.Log("=== ShopManager OnEnable ===");
-        
-        // DIAGNÓSTICO
-        if (CurrencyManager.Instance == null)
-        {
-            Debug.LogError("¡CurrencyManager.Instance es NULL!");
-        }
-        else
-        {
-            int credits = CurrencyManager.Instance.GetCurrentCredits();
-            Debug.Log($"CurrencyManager existe. Créditos: {credits}");
-        }
-        
-        // Determinar fase según el nivel actual
         if (GameManager.Instance != null)
         {
-            int currentLevel = GameManager.Instance.GetCurrentLevel();
-            currentPhase = currentLevel;
-            Debug.Log($"Nivel actual: {currentLevel}, Fase de tienda: {currentPhase}");
+            // Obtenemos el nivel actual para saber qué fase mostrar
+            currentPhase = GameManager.Instance.GetCurrentLevel();
+            Debug.Log($"[SHOP] Abriendo tienda. Nivel detectado: {currentPhase}");
         }
         
-        ShowPhasePanel(currentPhase);
+        RefreshShopUI();
+    }
+    
+    private void RefreshShopUI()
+    {
         UpdateCreditsDisplay();
+        ShowPhasePanel(currentPhase);
         UpdateButtonStates();
     }
     
     private void ShowPhasePanel(int phase)
     {
-        Debug.Log($"Mostrando panel de fase {phase}");
-        
-        // Desactivar todos los paneles
+        // Ocultar todos los paneles primero
         if (phase1Panel != null) phase1Panel.SetActive(false);
         if (phase2Panel != null) phase2Panel.SetActive(false);
         if (phase3Panel != null) phase3Panel.SetActive(false);
         
-        // Activar el panel correspondiente
-        switch (phase)
+        // Lógica de seguridad: Si el nivel es mayor a 3 (ej. nivel 4, 5),
+        // seguimos mostrando la Fase 3 (la más avanzada) en lugar de rompernos o volver a la 1.
+        int phaseToShow = phase;
+        if (phase > 3) 
+        {
+            phaseToShow = 3;
+        }
+
+        Debug.Log($"[SHOP] Mostrando panel de fase: {phaseToShow}");
+
+        switch (phaseToShow)
         {
             case 1:
                 if (phase1Panel != null) phase1Panel.SetActive(true);
-                if (shopTitleText != null) shopTitleText.text = "TIENDA - Elige tu Arma";
+                if (shopTitleText != null) shopTitleText.text = "TIENDA - ELIGE UN ARMA";
                 break;
             case 2:
                 if (phase2Panel != null) phase2Panel.SetActive(true);
-                if (shopTitleText != null) shopTitleText.text = "TIENDA - Mejora tus Stats";
+                if (shopTitleText != null) shopTitleText.text = "TIENDA - MEJORAS DE STATS";
                 break;
             case 3:
                 if (phase3Panel != null) phase3Panel.SetActive(true);
-                if (shopTitleText != null) shopTitleText.text = "TIENDA - Habilidades Especiales";
+                if (shopTitleText != null) shopTitleText.text = "TIENDA - HABILIDAD DEFINITIVA";
+                break;
+            default:
+                // Fallback por si acaso
+                if (phase1Panel != null) phase1Panel.SetActive(true);
                 break;
         }
     }
     
-    private void BuyUpgrade(string upgradeName, int cost, int phase)
+    private void BuyUpgrade(string upgradeName, int cost)
     {
-        Debug.Log($"═══ BuyUpgrade llamado ═══");
-        Debug.Log($"Mejora: {upgradeName}");
-        Debug.Log($"Costo: {cost}");
-        Debug.Log($"Fase: {phase}");
+        if (CurrencyManager.Instance == null) return;
         
-        if (CurrencyManager.Instance == null)
+        if (CurrencyManager.Instance.SpendCredits(cost))
         {
-            Debug.LogError("CurrencyManager.Instance es NULL!");
-            return;
-        }
-        
-        int currentCredits = CurrencyManager.Instance.GetCurrentCredits();
-        Debug.Log($"Créditos actuales: {currentCredits}");
-        
-        if (currentCredits >= cost)
-        {
-            Debug.Log("Suficientes créditos, intentando gastar...");
+            Debug.Log($"[SHOP] Compra exitosa: {upgradeName}. Cerrando tienda...");
+            ApplyUpgrade(upgradeName);
+            UpdateCreditsDisplay();
             
-            if (CurrencyManager.Instance.SpendCredits(cost))
-            {
-                Debug.Log($"✓ Créditos gastados exitosamente");
-                ApplyUpgrade(upgradeName);
-                UpdateCreditsDisplay();
-                CloseShop();
-            }
-            else
-            {
-                Debug.LogError("SpendCredits retornó false!");
-            }
+            // Cerramos la tienda inmediatamente tras comprar para avanzar
+            CloseShop();
         }
         else
         {
-            Debug.LogWarning($"No hay suficientes créditos! Necesitas {cost}, tienes {currentCredits}");
+            Debug.Log("[SHOP] Créditos insuficientes.");
         }
     }
     
     private void ApplyUpgrade(string upgradeName)
     {
-        Debug.Log($"Aplicando mejora: {upgradeName}");
-        
         switch (upgradeName)
         {
-            // FASE 1 - Armas
             case "Zigzag":
-                WeaponSystem weaponSystem = FindObjectOfType<WeaponSystem>();
-                if (weaponSystem != null)
-                {
-                    weaponSystem.ChangeWeapon(WeaponType.Zigzag);
-                    if (UpgradeManager.Instance != null)
-                        UpgradeManager.Instance.hasZigzag = true;
-                }
+                FindObjectOfType<WeaponSystem>()?.ChangeWeapon(WeaponType.Zigzag);
+                if (UpgradeManager.Instance) UpgradeManager.Instance.hasZigzag = true;
                 break;
-                
             case "Shotgun":
-                weaponSystem = FindObjectOfType<WeaponSystem>();
-                if (weaponSystem != null)
-                {
-                    weaponSystem.ChangeWeapon(WeaponType.Shotgun);
-                    if (UpgradeManager.Instance != null)
-                        UpgradeManager.Instance.hasShotgun = true;
-                }
+                FindObjectOfType<WeaponSystem>()?.ChangeWeapon(WeaponType.Shotgun);
+                if (UpgradeManager.Instance) UpgradeManager.Instance.hasShotgun = true;
                 break;
-                
             case "Rockets":
-                weaponSystem = FindObjectOfType<WeaponSystem>();
-                if (weaponSystem != null)
-                {
-                    weaponSystem.ChangeWeapon(WeaponType.Rockets);
-                    if (UpgradeManager.Instance != null)
-                        UpgradeManager.Instance.hasRockets = true;
-                }
+                FindObjectOfType<WeaponSystem>()?.ChangeWeapon(WeaponType.Rockets);
+                if (UpgradeManager.Instance) UpgradeManager.Instance.hasRockets = true;
                 break;
-            
-            // FASE 2 - Stats
             case "ExtraHealth":
-                if (UpgradeManager.Instance != null)
-                {
-                    UpgradeManager.Instance.BuyExtraLife();
-                    
-                    // Aplicar vida extra al jugador inmediatamente
-                    PlayerHealth playerHealth = FindObjectOfType<PlayerHealth>();
-                    if (playerHealth != null)
-                    {
-                        playerHealth.Heal(10); // +10 de vida
-                    }
-                }
+                if (UpgradeManager.Instance) UpgradeManager.Instance.BuyExtraLife();
+                FindObjectOfType<PlayerHealth>()?.Heal(10);
                 break;
-                
             case "MoreDamage":
-                if (UpgradeManager.Instance != null)
-                {
-                    UpgradeManager.Instance.BuyDamageUpgrade();
-                }
+                if (UpgradeManager.Instance) UpgradeManager.Instance.BuyDamageUpgrade();
                 break;
-                
             case "MoreSpeed":
-                if (UpgradeManager.Instance != null)
-                {
-                    UpgradeManager.Instance.BuySpeedUpgrade();
-                    
-                    // Aplicar velocidad al jugador inmediatamente
-                    PlayerController playerController = FindObjectOfType<PlayerController>();
-                    if (playerController != null)
-                    {
-                        playerController.UpdateSpeed();
-                    }
-                }
+                if (UpgradeManager.Instance) UpgradeManager.Instance.BuySpeedUpgrade();
+                FindObjectOfType<PlayerController>()?.UpdateSpeed();
                 break;
-            
-            // FASE 3 - Especiales
             case "MassiveHealth":
-                if (UpgradeManager.Instance != null)
-                {
-                    UpgradeManager.Instance.extraLives += 2; // +20 de vida (2 vidas extra)
-                    
-                    PlayerHealth playerHealth = FindObjectOfType<PlayerHealth>();
-                    if (playerHealth != null)
-                    {
-                        playerHealth.Heal(20);
-                    }
-                }
+                if (UpgradeManager.Instance) UpgradeManager.Instance.extraLives += 2;
+                FindObjectOfType<PlayerHealth>()?.Heal(20);
                 break;
-                
             case "Shield":
-                if (UpgradeManager.Instance != null)
-                {
-                    UpgradeManager.Instance.BuyShield();
-                    
-                    // Activar escudo inmediatamente
-                    ShieldSystem shield = FindObjectOfType<ShieldSystem>();
-                    if (shield != null)
-                    {
-                        shield.ActivateShield();
-                    }
-                }
-                break;
-                
-            default:
-                Debug.LogWarning($"Mejora desconocida: {upgradeName}");
+                if (UpgradeManager.Instance) UpgradeManager.Instance.BuyShield();
+                FindObjectOfType<ShieldSystem>()?.ActivateShield();
                 break;
         }
-    }
-    
-    private void ContinueWithoutUpgrade()
-    {
-        Debug.Log("Continuando sin comprar mejoras...");
-        CloseShop();
     }
     
     private void UpdateCreditsDisplay()
     {
-        if (creditsText == null)
+        if (CurrencyManager.Instance != null && creditsText != null)
         {
-            Debug.LogError("creditsText es NULL!");
-            return;
+            creditsText.text = $"Créditos: {CurrencyManager.Instance.GetCurrentCredits()}";
         }
-        
-        if (CurrencyManager.Instance == null)
-        {
-            Debug.LogError("CurrencyManager.Instance es NULL en UpdateCreditsDisplay!");
-            creditsText.text = "Créditos: ERROR";
-            return;
-        }
-        
-        int credits = CurrencyManager.Instance.GetCurrentCredits();
-        creditsText.text = $"Créditos: {credits}";
-        Debug.Log($"Créditos mostrados en UI: {credits}");
     }
     
     private void UpdateButtonStates()
     {
-        if (CurrencyManager.Instance == null)
-        {
-            Debug.LogError("No se puede actualizar botones, CurrencyManager es NULL");
-            return;
-        }
+        if (CurrencyManager.Instance == null) return;
         
         int credits = CurrencyManager.Instance.GetCurrentCredits();
-        Debug.Log($"Actualizando estado de botones con {credits} créditos");
         
-        // Actualizar según la fase actual
-        switch (currentPhase)
+        // Solo actualizamos los botones de la fase VISIBLE para ahorrar recursos
+        if (currentPhase == 1)
         {
-            case 1:
-                UpdateButton(btnZigzag, credits >= zigzagCost, "Zigzag", zigzagCost);
-                UpdateButton(btnShotgun, credits >= shotgunCost, "Shotgun", shotgunCost);
-                UpdateButton(btnRockets, credits >= rocketsCost, "Rockets", rocketsCost);
-                break;
-                
-            case 2:
-                UpdateButton(btnExtraHealth, credits >= extraHealthCost, "ExtraHealth", extraHealthCost);
-                UpdateButton(btnMoreDamage, credits >= moreDamageCost, "MoreDamage", moreDamageCost);
-                UpdateButton(btnMoreSpeed, credits >= moreSpeedCost, "MoreSpeed", moreSpeedCost);
-                break;
-                
-            case 3:
-                UpdateButton(btnMassiveHealth, credits >= massiveHealthCost, "MassiveHealth", massiveHealthCost);
-                UpdateButton(btnShield, credits >= shieldCost, "Shield", shieldCost);
-                break;
+            UpdateButton(btnZigzag, credits >= zigzagCost);
+            UpdateButton(btnShotgun, credits >= shotgunCost);
+            UpdateButton(btnRockets, credits >= rocketsCost);
         }
-        
-        // El botón de continuar siempre está activo
-        if (btnContinue != null)
+        else if (currentPhase == 2)
         {
-            btnContinue.interactable = true;
+            UpdateButton(btnExtraHealth, credits >= extraHealthCost);
+            UpdateButton(btnMoreDamage, credits >= moreDamageCost);
+            UpdateButton(btnMoreSpeed, credits >= moreSpeedCost);
+        }
+        else if (currentPhase >= 3) // >= 3 para cubrir niveles posteriores
+        {
+            UpdateButton(btnMassiveHealth, credits >= massiveHealthCost);
+            UpdateButton(btnShield, credits >= shieldCost);
         }
     }
     
-    private void UpdateButton(Button button, bool canAfford, string buttonName, int cost)
+    private void UpdateButton(Button btn, bool canAfford)
     {
-        if (button == null)
-        {
-            Debug.LogWarning($"Botón {buttonName} es NULL");
-            return;
-        }
-        
-        button.interactable = canAfford;
-        Debug.Log($"Botón {buttonName}: {(canAfford ? "ACTIVO" : "INACTIVO")} (Costo: {cost})");
-        
+        if (btn != null) btn.interactable = canAfford;
     }
     
-    private void CloseShop()
+    public void CloseShop()
     {
-        Debug.Log("CloseShop llamado");
-        
+        Debug.Log("[SHOP] Solicitando cierre de tienda al GameManager.");
         if (GameManager.Instance != null)
         {
             GameManager.Instance.CloseShop();
-        }
-        else
-        {
-            Debug.LogError("¡GameManager.Instance es NULL!");
         }
     }
 }

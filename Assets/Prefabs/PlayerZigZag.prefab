@@ -12,7 +12,6 @@ GameObject:
   - component: {fileID: 4837708775379972891}
   - component: {fileID: 2520066966278285641}
   - component: {fileID: 1960024433292822336}
-  - component: {fileID: 832697017028888927}
   - component: {fileID: -8785743331820760306}
   m_Layer: 7
   m_Name: PlayerZigZag
@@ -167,20 +166,6 @@ Rigidbody2D:
   m_SleepingMode: 1
   m_CollisionDetection: 0
   m_Constraints: 0
---- !u!114 &832697017028888927
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7047937800594155423}
-  m_Enabled: 0
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 79f847a6dbaea4b4eaf869778cd409e8, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::PlayerBullet
-  speed: 10
-  damage: 100
 --- !u!114 &-8785743331820760306
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -195,5 +180,5 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::ZigzagBullet
   speed: 12
   damage: 1
-  zigzagAmplitude: 3
-  zigzagFrequency: 3
+  zigzagAmplitude: 2
+  zigzagFrequency: 2

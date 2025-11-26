@@ -225,7 +225,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::EnemyHealthDisplay
   healthText: {fileID: 0}
-  offset: {x: 0, y: 0.5, z: 0}
+  offset: {x: 0, y: 0.2, z: 0}
   minecraftFont: {fileID: 11400000, guid: 9c407b30437c50647b2d9c3682169b55, type: 2}
 --- !u!1001 &3787896176051407756
 PrefabInstance:

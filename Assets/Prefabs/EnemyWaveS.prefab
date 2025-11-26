@@ -14,6 +14,7 @@ GameObject:
   - component: {fileID: 7839307646899280981}
   - component: {fileID: 2996492737707379881}
   - component: {fileID: 5790643241279448255}
+  - component: {fileID: 2371354652588427661}
   m_Layer: 8
   m_Name: EnemyWaveS
   m_TagString: Enemy
@@ -203,8 +204,29 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::EnemyWaveShooter
   enemyData: {fileID: 11400000, guid: 1ac25c839e883924984530f8bf51e07c, type: 2}
-  wavePoints: 7
-  waveAmplitude: 60
+  wavePoints: 5
+  waveAmplitude: 65
+  leftX: -8
+  rightX: 8
+  patrolSpeedX: 3
+  topY: 4
+  bottomY: 2
+  patrolSpeedY: 2
+--- !u!114 &2371354652588427661
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1633647093165963086}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0f5422cdcf5114542bc83fc43712c28a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::EnemyHealthDisplay
+  healthText: {fileID: 0}
+  offset: {x: 0, y: 0.5, z: 0}
+  minecraftFont: {fileID: 11400000, guid: 9c407b30437c50647b2d9c3682169b55, type: 2}
 --- !u!1001 &3787896176051407756
 PrefabInstance:
   m_ObjectHideFlags: 0

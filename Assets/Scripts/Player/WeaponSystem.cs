@@ -38,12 +38,21 @@ public class WeaponSystem : MonoBehaviour
         if (Input.GetButton("Fire1") && Time.time >= nextFireTime)
         {
             Shoot();
-            nextFireTime = Time.time + fireRate;
+            
+            // Actualizar fireRate desde el manager si es posible, si no usar el local
+            float currentFireRate = (UpgradeManager.Instance != null) ? UpgradeManager.Instance.GetFireRate() : fireRate;
+            nextFireTime = Time.time + currentFireRate;
         }
     }
     
     private void Shoot()
     {
+        // Sincronizar daño con UpgradeManager antes de disparar
+        if (UpgradeManager.Instance != null)
+        {
+            damage = UpgradeManager.Instance.GetTotalDamage();
+        }
+
         switch (currentWeapon)
         {
             case WeaponType.Normal:
@@ -65,7 +74,12 @@ public class WeaponSystem : MonoBehaviour
     {
         if (normalBulletPrefab != null && firePoint != null)
         {
-            Instantiate(normalBulletPrefab, firePoint.position, Quaternion.identity);
+            GameObject bullet = Instantiate(normalBulletPrefab, firePoint.position, Quaternion.identity);
+            PlayerBullet bulletScript = bullet.GetComponent<PlayerBullet>();
+            if (bulletScript != null)
+            {
+                bulletScript.SetDamage(damage);
+            }
         }
     }
     
@@ -86,6 +100,8 @@ public class WeaponSystem : MonoBehaviour
             int bulletCount = 5;
             float spreadAngle = 40f; // Ángulo total del abanico
             
+            int shotgunDamage = Mathf.Max(1, Mathf.RoundToInt(damage * 0.5f));
+
             for (int i = 0; i < bulletCount; i++)
             {
                 // Calcular ángulo de cada bala
@@ -94,12 +110,13 @@ public class WeaponSystem : MonoBehaviour
                 
                 GameObject bullet = Instantiate(normalBulletPrefab, firePoint.position, rotation);
                 
-                // Ajustar dirección
+                // Ajustar dirección y DAÑO
                 PlayerBullet bulletScript = bullet.GetComponent<PlayerBullet>();
                 if (bulletScript != null)
                 {
                     Vector3 direction = rotation * Vector3.up;
                     bulletScript.SetDirection(direction);
+                    bulletScript.SetDamage(shotgunDamage); // Aplicamos el daño reducido aquí
                 }
             }
         }
@@ -112,11 +129,11 @@ public class WeaponSystem : MonoBehaviour
             // Dispara 1 cohete (más lento pero más daño)
             GameObject rocket = Instantiate(rocketBulletPrefab, firePoint.position, Quaternion.identity);
             
-            // Los cohetes hacen más daño
+            // Los cohetes hacen mucho más daño (+2 del base)
             PlayerBullet bulletScript = rocket.GetComponent<PlayerBullet>();
             if (bulletScript != null)
             {
-                bulletScript.SetDamage(damage + 1); // +1 de daño extra
+                bulletScript.SetDamage(damage + 2); 
             }
         }
     }

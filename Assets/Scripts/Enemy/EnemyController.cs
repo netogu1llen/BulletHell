@@ -8,7 +8,7 @@ public class EnemyController : MonoBehaviour
     private float nextFireTime;
     private SpriteRenderer spriteRenderer;
     
-    void Start()
+    protected virtual void Start()
     {
         currentHealth = enemyData.maxHealth;
         spriteRenderer = GetComponent<SpriteRenderer>();
@@ -38,7 +38,7 @@ public class EnemyController : MonoBehaviour
         HandleShooting();
     }
     
-    private void HandleShooting()
+    protected virtual void HandleShooting()
     {
         if (Time.time >= nextFireTime && enemyData.bulletPrefab != null)
         {
