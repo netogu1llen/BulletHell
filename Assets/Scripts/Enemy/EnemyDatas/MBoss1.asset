@@ -12,10 +12,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9b4f8fbb1fa3e704196a87e9992b40fa, type: 3}
   m_Name: MBoss1
   m_EditorClassIdentifier: Assembly-CSharp::EnemyData
-  enemyName: EnemySpiral
-  maxHealth: 10
+  enemyName: Mboss1
+  maxHealth: 100
   moveSpeed: 2
-  damageToPlayer: 1
+  damageToPlayer: 2
   fireRate: 0.2
   bulletPrefab: {fileID: 2760153454558538754, guid: 4b0f5a0360c5b324ca715a71dd4f4423, type: 3}
   minCredits: 1

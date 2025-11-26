@@ -365,7 +365,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: -0.0010986328, y: 0}
+  m_AnchoredPosition: {x: -0.0012207031, y: 0}
   m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!1 &334798348
@@ -2802,6 +2802,10 @@ MonoBehaviour:
     - {fileID: 11400000, guid: 216e7baca948a7f4e8fbfe66784d707c, type: 2}
     - {fileID: 11400000, guid: 3ccf9f873b06e6640b1660e6ce9b1145, type: 2}
     - {fileID: 11400000, guid: c36f527c7dd4226439f195d7fc725c00, type: 2}
+  - levelName: Level2
+    waves:
+    - {fileID: 11400000, guid: 216e7baca948a7f4e8fbfe66784d707c, type: 2}
+    - {fileID: 11400000, guid: 5f4221cf296cf7f4792eb88fe1740227, type: 2}
   currentLevelIndex: 0
   currentWaveIndex: 0
   enemiesAlive: 0

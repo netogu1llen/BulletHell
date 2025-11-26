@@ -18,5 +18,5 @@ MonoBehaviour:
     spawnPosition: {x: -10, y: 6, z: 0}
   - enemyPrefab: {fileID: 1633647093165963086, guid: 565efcd7ffef49f4a91116fd7fc0ad95, type: 3}
     spawnPosition: {x: 10, y: 6, z: 0}
-  delayBeforeStart: 30
-  spawnDelay: 10
+  delayBeforeStart: 2
+  spawnDelay: 5

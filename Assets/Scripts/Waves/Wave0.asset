@@ -14,7 +14,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::WaveData
   waveName: 
   enemies:
-  - enemyPrefab: {fileID: 1633647093165963086, guid: e15b49625582c4b41b2e74b115717652, type: 3}
-    spawnPosition: {x: 0, y: 6, z: 0}
+  - enemyPrefab: {fileID: 0}
+    spawnPosition: {x: 0, y: 0, z: 0}
+  - enemyPrefab: {fileID: 0}
+    spawnPosition: {x: 0, y: 0, z: 0}
   delayBeforeStart: 1
   spawnDelay: 0.3
