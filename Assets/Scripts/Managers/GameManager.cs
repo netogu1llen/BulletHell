@@ -89,6 +89,7 @@ public class GameManager : MonoBehaviour
     {
         Debug.Log($"¡Nivel {currentLevel} completado!");
         
+        // Si aún quedan niveles regulares, abre la tienda
         if (currentLevel < totalLevels)
         {
             OpenShop();
@@ -96,8 +97,14 @@ public class GameManager : MonoBehaviour
         else
         {
             Debug.Log("¡BOSS FINAL!");
-            // Aquí iría tu lógica para cargar la escena del Boss o spawnearlo
-            currentLevel++; 
+            currentLevel++; // Subimos nivel (ej: de 3 a 4)
+            
+            // CORRECCIÓN: Debes decirle al WaveManager que inicie el nivel del Boss
+            // Asegúrate de tener una "Level 4" (o el índice que corresponda) configurada en el inspector del WaveManager
+            if (waveManager != null)
+            {
+                waveManager.StartNextLevel(currentLevel); 
+            }
         }
     }
     

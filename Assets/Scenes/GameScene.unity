@@ -265,7 +265,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: UnityEngine.UI::UnityEngine.UI.Image
   m_Material: {fileID: 0}
   m_Color: {r: 1, g: 1, b: 1, a: 0}
-  m_RaycastTarget: 1
+  m_RaycastTarget: 0
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
   m_OnCullStateChanged:
@@ -321,7 +321,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: UnityEngine.UI::UnityEngine.UI.Image
   m_Material: {fileID: 0}
   m_Color: {r: 0, g: 0, b: 0, a: 0.7058824}
-  m_RaycastTarget: 1
+  m_RaycastTarget: 0
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
   m_OnCullStateChanged:
@@ -385,7 +385,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!224 &334798349
 RectTransform:
   m_ObjectHideFlags: 0
@@ -1437,8 +1437,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 218f64d44709ca244b1fbe6aafc7e4e5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::PlayerHealth
-  maxHealth: 50
-  currentHealth: 50
+  maxHealth: 20
+  currentHealth: 20
   invulnerabilityDuration: 0.5
   spriteRenderer: {fileID: 647940511}
   flashSpeed: 10
@@ -1722,7 +1722,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: UnityEngine.UI::UnityEngine.UI.Image
   m_Material: {fileID: 0}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
-  m_RaycastTarget: 1
+  m_RaycastTarget: 0
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
   m_OnCullStateChanged:
@@ -2355,7 +2355,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 27b5b31afbe81604dbc46d227f30076c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::CurrencyManager
-  currentCredits: 15
+  currentCredits: 0
   creditPrefab: {fileID: 6820596905426009170, guid: 3a7effe6a648503418ed3b66021f201f, type: 3}
 --- !u!4 &956816136
 Transform:
@@ -2469,7 +2469,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: UnityEngine.UI::UnityEngine.UI.Image
   m_Material: {fileID: 0}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
-  m_RaycastTarget: 1
+  m_RaycastTarget: 0
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
   m_OnCullStateChanged:
@@ -2802,10 +2802,27 @@ MonoBehaviour:
     - {fileID: 11400000, guid: 216e7baca948a7f4e8fbfe66784d707c, type: 2}
     - {fileID: 11400000, guid: 3ccf9f873b06e6640b1660e6ce9b1145, type: 2}
     - {fileID: 11400000, guid: c36f527c7dd4226439f195d7fc725c00, type: 2}
+    - {fileID: 11400000, guid: c36f527c7dd4226439f195d7fc725c00, type: 2}
   - levelName: Level2
     waves:
     - {fileID: 11400000, guid: 216e7baca948a7f4e8fbfe66784d707c, type: 2}
     - {fileID: 11400000, guid: 5f4221cf296cf7f4792eb88fe1740227, type: 2}
+    - {fileID: 11400000, guid: 0f60e32f40cc36d4484d52a56a12117b, type: 2}
+    - {fileID: 11400000, guid: 5f4221cf296cf7f4792eb88fe1740227, type: 2}
+  - levelName: Level3
+    waves:
+    - {fileID: 11400000, guid: 216e7baca948a7f4e8fbfe66784d707c, type: 2}
+    - {fileID: 11400000, guid: 0f60e32f40cc36d4484d52a56a12117b, type: 2}
+    - {fileID: 11400000, guid: f0a8d6ff2f0896e428cb0a5bb8a5602b, type: 2}
+  - levelName: Level4
+    waves:
+    - {fileID: 11400000, guid: 216e7baca948a7f4e8fbfe66784d707c, type: 2}
+    - {fileID: 11400000, guid: 5f4221cf296cf7f4792eb88fe1740227, type: 2}
+  - levelName: Level5
+    waves:
+    - {fileID: 11400000, guid: 216e7baca948a7f4e8fbfe66784d707c, type: 2}
+    - {fileID: 11400000, guid: 5f4221cf296cf7f4792eb88fe1740227, type: 2}
+    - {fileID: 11400000, guid: 87a341164d7ef7c42a032d67d33f3373, type: 2}
   currentLevelIndex: 0
   currentWaveIndex: 0
   enemiesAlive: 0
@@ -3520,7 +3537,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: UnityEngine.UI::UnityEngine.UI.Image
   m_Material: {fileID: 0}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
-  m_RaycastTarget: 1
+  m_RaycastTarget: 0
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
   m_OnCullStateChanged:
@@ -3969,7 +3986,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!224 &1351973496
 RectTransform:
   m_ObjectHideFlags: 0
@@ -5221,7 +5238,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: cf9692527fcfee2409f4388abded7142, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::ShopManager
-  shopPanel: {fileID: 323096908}
+  shopPanel: {fileID: 0}
   creditsText: {fileID: 1157730715}
   shopTitleText: {fileID: 665212826}
   phase1Panel: {fileID: 192939738}
@@ -5235,7 +5252,9 @@ MonoBehaviour:
   btnMoreSpeed: {fileID: 484877937}
   btnMassiveHealth: {fileID: 1816108876}
   btnShield: {fileID: 1276822741}
-  btnContinue: {fileID: 1745590167}
+  btnContinuePhase1: {fileID: 1745590167}
+  btnContinuePhase2: {fileID: 1997417031}
+  btnContinuePhase3: {fileID: 879943223}
   zigzagCost: 7
   shotgunCost: 7
   rocketsCost: 9

@@ -219,10 +219,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::BossFinal
   enemyData: {fileID: 11400000, guid: 65bcbeed4743d40438c462c85b1a785f, type: 2}
-  circleCount: 25
-  targetedBullets: 4
+  circleCount: 18
+  targetedBullets: 3
   spreadAngle: 30
-  patternDuration: 8
+  patternDuration: 6
   leftX: -11
   rightX: 11
   patrolSpeedX: 3

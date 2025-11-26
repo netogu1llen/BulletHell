@@ -65,7 +65,7 @@ public class ShopManager : MonoBehaviour
         if (btnMassiveHealth != null) btnMassiveHealth.onClick.AddListener(() => BuyUpgrade("MassiveHealth", massiveHealthCost));
         if (btnShield != null) btnShield.onClick.AddListener(() => BuyUpgrade("Shield", shieldCost));
         
-        // --- Listeners para TODOS los botones de continuar (por si no compras nada) ---
+        // --- Listeners para TODOS los botones de continuar ---
         if (btnContinuePhase1 != null) btnContinuePhase1.onClick.AddListener(CloseShop);
         if (btnContinuePhase2 != null) btnContinuePhase2.onClick.AddListener(CloseShop);
         if (btnContinuePhase3 != null) btnContinuePhase3.onClick.AddListener(CloseShop);
@@ -75,16 +75,9 @@ public class ShopManager : MonoBehaviour
     {
         if (GameManager.Instance != null)
         {
-            // Obtenemos el nivel actual para saber qué fase mostrar
             currentPhase = GameManager.Instance.GetCurrentLevel();
-            Debug.Log($"[SHOP] Abriendo tienda. Nivel detectado: {currentPhase}");
         }
         
-        RefreshShopUI();
-    }
-    
-    private void RefreshShopUI()
-    {
         UpdateCreditsDisplay();
         ShowPhasePanel(currentPhase);
         UpdateButtonStates();
@@ -92,20 +85,14 @@ public class ShopManager : MonoBehaviour
     
     private void ShowPhasePanel(int phase)
     {
-        // Ocultar todos los paneles primero
+        // Desactivar todos
         if (phase1Panel != null) phase1Panel.SetActive(false);
         if (phase2Panel != null) phase2Panel.SetActive(false);
         if (phase3Panel != null) phase3Panel.SetActive(false);
         
-        // Lógica de seguridad: Si el nivel es mayor a 3 (ej. nivel 4, 5),
-        // seguimos mostrando la Fase 3 (la más avanzada) en lugar de rompernos o volver a la 1.
+        // Activar según fase
         int phaseToShow = phase;
-        if (phase > 3) 
-        {
-            phaseToShow = 3;
-        }
-
-        Debug.Log($"[SHOP] Mostrando panel de fase: {phaseToShow}");
+        if (phase > 3) phaseToShow = 3;
 
         switch (phaseToShow)
         {
@@ -121,10 +108,6 @@ public class ShopManager : MonoBehaviour
                 if (phase3Panel != null) phase3Panel.SetActive(true);
                 if (shopTitleText != null) shopTitleText.text = "TIENDA - HABILIDAD DEFINITIVA";
                 break;
-            default:
-                // Fallback por si acaso
-                if (phase1Panel != null) phase1Panel.SetActive(true);
-                break;
         }
     }
     
@@ -134,16 +117,9 @@ public class ShopManager : MonoBehaviour
         
         if (CurrencyManager.Instance.SpendCredits(cost))
         {
-            Debug.Log($"[SHOP] Compra exitosa: {upgradeName}. Cerrando tienda...");
             ApplyUpgrade(upgradeName);
             UpdateCreditsDisplay();
-            
-            // Cerramos la tienda inmediatamente tras comprar para avanzar
             CloseShop();
-        }
-        else
-        {
-            Debug.Log("[SHOP] Créditos insuficientes.");
         }
     }
     
@@ -199,7 +175,6 @@ public class ShopManager : MonoBehaviour
         
         int credits = CurrencyManager.Instance.GetCurrentCredits();
         
-        // Solo actualizamos los botones de la fase VISIBLE para ahorrar recursos
         if (currentPhase == 1)
         {
             UpdateButton(btnZigzag, credits >= zigzagCost);
@@ -212,7 +187,7 @@ public class ShopManager : MonoBehaviour
             UpdateButton(btnMoreDamage, credits >= moreDamageCost);
             UpdateButton(btnMoreSpeed, credits >= moreSpeedCost);
         }
-        else if (currentPhase >= 3) // >= 3 para cubrir niveles posteriores
+        else if (currentPhase >= 3)
         {
             UpdateButton(btnMassiveHealth, credits >= massiveHealthCost);
             UpdateButton(btnShield, credits >= shieldCost);
@@ -221,12 +196,14 @@ public class ShopManager : MonoBehaviour
     
     private void UpdateButton(Button btn, bool canAfford)
     {
-        if (btn != null) btn.interactable = canAfford;
+        if (btn != null)
+        {
+            btn.interactable = canAfford;
+        }
     }
     
     public void CloseShop()
     {
-        Debug.Log("[SHOP] Solicitando cierre de tienda al GameManager.");
         if (GameManager.Instance != null)
         {
             GameManager.Instance.CloseShop();
